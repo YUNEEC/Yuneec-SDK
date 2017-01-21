@@ -18,7 +18,9 @@ public:
     enum class Result {
         SUCCESS = 0,
         ERROR,
+        BUSY,
         TIMEOUT,
+        INVALID_ARGUMENT,
         UNKNOWN
     };
 
@@ -32,6 +34,8 @@ public:
 
     void start_mission_async(result_callback_t callback);
     void pause_mission_async(result_callback_t callback);
+
+    void set_current_mission_item_async(int current, result_callback_t callback);
 
     bool mission_finished() const;
 

@@ -34,6 +34,8 @@ public:
         uint16_t product_id;
     };
 
+    uint64_t uuid() const;
+
     bool is_complete() const;
     DroneType get_drone_type() const;
     const char *get_drone_type_str();
