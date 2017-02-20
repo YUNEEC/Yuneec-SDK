@@ -18,6 +18,7 @@ public:
     enum class Result {
         SUCCESS = 0,
         ERROR,
+        TOO_MANY_MISSION_ITEMS,
         BUSY,
         TIMEOUT,
         INVALID_ARGUMENT,

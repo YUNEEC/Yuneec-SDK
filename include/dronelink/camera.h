@@ -40,6 +40,10 @@ public:
         bool shutter_auto;
         bool iso_auto;
         bool white_space_auto;
+        enum class Mode {
+            VIDEO,
+            PHOTO
+        } mode;
     };
 
     /**
