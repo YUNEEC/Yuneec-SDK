@@ -14,8 +14,9 @@ public:
     ~Info();
 
     enum class DroneType : unsigned {
-        UNKNOWN = 0,
-        TYPHOON_H_480,
+        NOT_INITIALIZED = 0,
+        UNKNOWN,
+        TYPHOON_H520,
     };
 
     // 16 chars + terminating 0

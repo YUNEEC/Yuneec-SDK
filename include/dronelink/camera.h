@@ -41,9 +41,15 @@ public:
         bool iso_auto;
         bool white_space_auto;
         enum class Mode {
+            UNKNOWN,
             VIDEO,
             PHOTO
         } mode;
+    };
+
+    struct Status {
+        bool video_on;
+        bool photo_interval_on;
     };
 
     /**
@@ -57,6 +63,9 @@ public:
 
     typedef std::function<void(Result, const Settings &)> get_settings_callback_t;
     void get_settings_async(get_settings_callback_t callback);
+
+    typedef std::function<void(Result, const Status &)> get_status_callback_t;
+    void get_status_async(get_status_callback_t callback);
 
     Result take_photo();
 
