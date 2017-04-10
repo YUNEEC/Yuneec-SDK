@@ -3,9 +3,6 @@
 #include <functional>
 #include <vector>
 #include <string>
-#include <cstdint>
-
-#define CAMERA_HTTP
 
 namespace dronelink {
 
@@ -19,6 +16,7 @@ public:
 
     enum class Result {
         SUCCESS = 0,
+        IN_PROGRESS,
         DENIED,
         ERROR,
         TIMEOUT,
@@ -83,13 +81,28 @@ public:
     void start_video_async(result_callback_t callback);
     void stop_video_async(result_callback_t callback);
 
-    struct Media {
-        std::string url;
-        float size_mib;
+    struct MediaInfo {
+        MediaInfo()
+        {
+        }
+        ~MediaInfo()
+        {
+            path.clear();
+        }
+
+        std::string path {};
+        float size_mib = 0.0f;
     };
 
-    const std::string &get_media_http_index_url();
-    bool extract_media_from_http_index(const std::string &http_index, std::vector<Media> &files);
+    typedef std::function<void(Result, std::vector<MediaInfo> &)>
+    get_media_infos_callback_t;
+    void get_media_infos_async(get_media_infos_callback_t callback);
+
+    typedef std::function<void(Result, long unsigned bytes, long unsigned bytes_total)>
+    get_media_callback_t;
+    void get_media_async(const std::string &local_path,
+                         const std::string &url,
+                         get_media_callback_t callback);
 
     // Non-copyable
     Camera(const Camera &) = delete;
