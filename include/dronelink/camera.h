@@ -3,6 +3,7 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include <cmath>
 
 namespace dronelink {
 
@@ -28,31 +29,51 @@ public:
 
     typedef std::function<void(Result)> result_callback_t;
 
+    /**
+     * Note that shutter and ISO must be either both set to auto or both to a value (not-auto).
+     *
+     * Values left at NAN, won't have any effect.
+     */
     struct Settings {
-        double aperture_value;
-        double shutter_speed_s;
-        double iso_sensitivity;
-        double white_space_balance_temperature_k;
-
-        bool aperture_auto;
-        bool shutter_auto;
-        bool iso_auto;
-        bool white_space_auto;
         enum class Mode {
             UNKNOWN,
-            VIDEO,
-            PHOTO
-        } mode;
+            PHOTO,
+            VIDEO
+        } mode {Mode::UNKNOWN};
+
+        double aperture_value {NAN};
+
+        double shutter_speed_s {NAN};
+
+        double iso_sensitivity {NAN};
+
+        double white_balance_temperature_k {NAN};
+        bool white_balance_locked {false};
+
+        double exposure_value {NAN};
+        enum class ExposureMode {
+            UNKNOWN,
+            FULL_AUTO,
+            FULL_MANUAL,
+            APERTURE_PRIORITY,
+            SHUTTER_PRIORITY
+        } exposure_mode {ExposureMode::FULL_AUTO};
     };
 
     struct Status {
         bool video_on;
         bool photo_interval_on;
+
+        enum class StorageStatus {
+            NOT_AVAILABLE,
+            UNFORMATTED,
+            FORMATTED
+        } storage_status;
+        float used_storage_mib;
+        float available_storage_mib;
+        float total_storage_mib;
     };
 
-    /**
-     * Note that shutter and ISO must be either both set to auto or both to a value (not-auto).
-     */
 
     Result set_settings(const Settings &settings);
     Result get_settings(Settings &settings);
@@ -94,8 +115,7 @@ public:
         float size_mib = 0.0f;
     };
 
-    typedef std::function<void(Result, std::vector<MediaInfo> &)>
-    get_media_infos_callback_t;
+    typedef std::function<void(Result, std::vector<MediaInfo> &)> get_media_infos_callback_t;
     void get_media_infos_async(get_media_infos_callback_t callback);
 
     typedef std::function<void(Result, long unsigned bytes, long unsigned bytes_total)>
