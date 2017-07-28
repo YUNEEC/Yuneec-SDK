@@ -193,7 +193,7 @@ AS = /home/dario/Android/android-ndk-r13b/prebuilt/linux-x86_64/bin/../../../too
 AUTOCONF = ${SHELL} /home/dario/src/Yuneec_SDK_Builder/DroneLink/curl-android-ios/curl/missing autoconf
 AUTOHEADER = ${SHELL} /home/dario/src/Yuneec_SDK_Builder/DroneLink/curl-android-ios/curl/missing autoheader
 AUTOMAKE = ${SHELL} /home/dario/src/Yuneec_SDK_Builder/DroneLink/curl-android-ios/curl/missing automake-1.15
-AWK = mawk
+AWK = gawk
 BLANK_AT_MAKETIME = 
 CC = /home/dario/Android/android-ndk-r13b/prebuilt/linux-x86_64/bin/../../../toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc
 CCDEPMODE = depmode=gcc3

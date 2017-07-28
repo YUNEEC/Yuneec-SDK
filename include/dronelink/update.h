@@ -75,7 +75,14 @@ public:
         Cancelled
     };
 
-    typedef std::function<void(int progress, UpdateState status)> update_callback_t;
+    enum class Component {
+        None,
+        Autopilot,
+        Camera,
+        Gimbal
+    };
+
+    typedef std::function<void(int progress, UpdateState status, Component component)> update_callback_t;
 
     void do_firmware_update(update_callback_t callback, bool force_update);
 
