@@ -83,8 +83,14 @@ public:
     };
 
     typedef std::function<void(int progress, UpdateState status, Component component)> update_callback_t;
+    typedef std::function<void(Component component,
+                               UpdateInstruction instruction,
+                               std::string latest_version,
+                               std::string installed_version)> version_callback_t;
 
     void do_firmware_update(update_callback_t callback, bool force_update);
+    void do_version_check(version_callback_t callback, bool delete_installed);
+    void add_version_listener(version_callback_t callback);
 
     // Autopilot
     UpdateInstruction check_autopilot_version();
