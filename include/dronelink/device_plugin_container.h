@@ -6,8 +6,10 @@
 #include "logging.h"
 #include "offboard.h"
 #include "telemetry.h"
+#include "calibration.h"
 #include "camera.h"
 #include "gimbal.h"
+#include "manual.h"
 #include "mission.h"
 #include "mission_item.h"
 
@@ -21,8 +23,10 @@ class InfoImpl;
 class LoggingImpl;
 class OffboardImpl;
 class TelemetryImpl;
+class CalibrationImpl;
 class CameraImpl;
 class GimbalImpl;
+class ManualImpl;
 class MissionImpl;
 
 
@@ -37,8 +41,10 @@ public:
     Logging &logging() { return _logging; }
     Offboard &offboard() { return _offboard; }
     Telemetry &telemetry() { return _telemetry; }
+    Calibration &calibration() { return _calibration; }
     Camera &camera() { return _camera; }
     Gimbal &gimbal() { return _gimbal; }
+    Manual &manual() { return _manual; }
     Mission &mission() { return _mission; }
 
 
@@ -62,10 +68,14 @@ protected:
     Offboard _offboard;
     TelemetryImpl *_telemetry_impl;
     Telemetry _telemetry;
+    CalibrationImpl *_calibration_impl;
+    Calibration _calibration;
     CameraImpl *_camera_impl;
     Camera _camera;
     GimbalImpl *_gimbal_impl;
     Gimbal _gimbal;
+    ManualImpl *_manual_impl;
+    Manual _manual;
     MissionImpl *_mission_impl;
     Mission _mission;
 
