@@ -82,7 +82,8 @@ public:
         Gimbal
     };
 
-    typedef std::function<void(int progress, UpdateState status, Component component)> update_callback_t;
+    typedef std::function<void(int progress, UpdateState status, Component component)>
+    update_callback_t;
     typedef std::function<void(Component component,
                                UpdateInstruction instruction,
                                std::string latest_version,
