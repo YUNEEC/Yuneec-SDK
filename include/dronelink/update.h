@@ -22,7 +22,9 @@ public:
         MAJOR_FIRMWARE_UPDATE_AVAILABLE = 5,
         MANDATORY_FIRMWARE_UPDATE_AVAILABLE = 6,
         UNKNOWN_ERROR = 7,
-        UPDATE_PROCESS_ONGOING = 8
+        UPDATE_PROCESS_ONGOING = 8,
+        CHECK_INSTALLED_VERSION_TIMEOUT = 9,
+        CHECK_LATEST_VERSION_TIMEOUT = 10
     };
 
     // 16 chars + terminating 0
@@ -72,7 +74,9 @@ public:
         Verifying,
         Finished,
         Error,
-        Cancelled
+        Cancelled,        
+        DownloadingTimeout,
+        UploadingTimeout
     };
 
     enum class Component {
