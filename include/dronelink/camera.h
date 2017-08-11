@@ -113,19 +113,22 @@ public:
     bool get_possible_options(const std::string &setting_name, std::vector<std::string> &options);
 
     enum class WhiteBalance {
-        AUTO = 0,
-        INCANDESCENT = 1,
-        SUNSET = 3,
-        SUNNY = 4,
-        CLOUDY = 5,
-        FLUORESCENT = 7,
-        LOCK = 99
+        AUTO,
+        INCANDESCENT,
+        SUNSET,
+        SUNNY,
+        CLOUDY,
+        FLUORESCENT,
+        LOCK,
+        UNKNOWN
     };
 
-    void set_white_balance_async(WhiteBalance white_balance, const result_callback_t &callback);
+    const char *white_balance_str(WhiteBalance white_balance);
 
-    typedef std::function <void(Result, WhiteBalance white_balance)> get_white_balance_callback_t;
-    void get_white_balance_async(const get_white_balance_callback_t &callback);
+    typedef std::function <void(Result, WhiteBalance white_balance)> white_balance_callback_t;
+    void set_white_balance_async(WhiteBalance white_balance,
+                                 const white_balance_callback_t &callback);
+    void get_white_balance_async(const white_balance_callback_t &callback);
 
     enum class ColorMode {
         NEUTRAL = 0,
