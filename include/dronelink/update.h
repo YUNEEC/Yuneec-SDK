@@ -76,7 +76,9 @@ public:
         Error,
         Cancelled,        
         DownloadingTimeout,
-        UploadingTimeout
+        UploadingTimeout,
+        BatteryTooLow,
+        SDCardNotInserted
     };
 
     enum class Component {
