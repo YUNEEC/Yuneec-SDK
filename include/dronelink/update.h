@@ -61,6 +61,12 @@ public:
         std::string model;
     };
 
+    struct DatapilotVersion {
+        int major;
+        int minor;
+        int patch;
+    };
+
     enum class UpdateState {
         Idle,
         ConnectingToVehicle,
@@ -85,7 +91,8 @@ public:
         None,
         Autopilot,
         Camera,
-        Gimbal
+        Gimbal,
+        Datapilot
     };
 
     typedef std::function<void(int progress, UpdateState status, Component component)>
@@ -96,6 +103,8 @@ public:
                                std::string installed_version)> version_callback_t;
 
     void do_firmware_update(update_callback_t callback, bool force_update);
+    void do_app_update(update_callback_t callback, bool check_version_only);
+    void set_app_version(std::string version_text);
     void do_version_check(version_callback_t callback, bool delete_installed);
     void add_version_listener(version_callback_t callback);
 

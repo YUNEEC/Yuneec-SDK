@@ -113,31 +113,61 @@ public:
     bool get_possible_options(const std::string &setting_name, std::vector<std::string> &options);
 
     enum class WhiteBalance {
-        AUTO = 0,
-        INCANDESCENT = 1,
-        SUNSET = 3,
-        SUNNY = 4,
-        CLOUDY = 5,
-        FLUORESCENT = 7,
-        LOCK = 99
+        AUTO,
+        INCANDESCENT,
+        SUNSET,
+        SUNNY,
+        CLOUDY,
+        FLUORESCENT,
+        LOCK,
+        UNKNOWN
     };
 
-    void set_white_balance_async(WhiteBalance white_balance, const result_callback_t &callback);
+    const char *white_balance_str(WhiteBalance white_balance);
 
-    typedef std::function <void(Result, WhiteBalance white_balance)> get_white_balance_callback_t;
-    void get_white_balance_async(const get_white_balance_callback_t &callback);
+    typedef std::function <void(Result, WhiteBalance white_balance)> white_balance_callback_t;
+    void set_white_balance_async(WhiteBalance white_balance,
+                                 const white_balance_callback_t &callback);
+    void get_white_balance_async(const white_balance_callback_t &callback);
 
     enum class ColorMode {
-        NEUTRAL = 0,
-        ENHANCED = 1,
-        NIGHT = 3,
-        UNPROCESSED = 2
+        NEUTRAL,
+        ENHANCED,
+        NIGHT,
+        UNPROCESSED,
+        UNKNOWN
     };
 
-    void set_color_mode_async(ColorMode color_mode, const result_callback_t &callback);
+    typedef std::function <void(Result, ColorMode)> color_mode_callback_t;
+    void set_color_mode_async(ColorMode color_mode, const color_mode_callback_t &callback);
+    void get_color_mode_async(const color_mode_callback_t &callback);
 
-    typedef std::function <void(Result, ColorMode)> get_color_mode_callback_t;
-    void get_color_mode_async(const get_color_mode_callback_t &callback);
+    enum class ExposureMode {
+        AUTO,
+        MANUAL,
+        UNKNOWN
+    };
+
+    typedef std::function <void(Result, ExposureMode)> exposure_mode_callback_t;
+    void set_exposure_mode_async(ExposureMode exposure_mode, const exposure_mode_callback_t &callback);
+    void get_exposure_mode_async(const exposure_mode_callback_t &callback);
+
+    typedef std::function <void(Result, float)> exposure_value_callback_t;
+    void set_exposure_value_async(float exposure_value, const exposure_value_callback_t &callback);
+    void get_exposure_value_async(const exposure_value_callback_t &callback);
+
+    struct ShutterSpeedS {
+        int numerator;
+        int denominator;
+    };
+
+    typedef std::function <void(Result, ShutterSpeedS)> shutter_speed_callback_t;
+    void set_shutter_speed_async(ShutterSpeedS shutter_speed, const shutter_speed_callback_t &callback);
+    void get_shutter_speed_async(const shutter_speed_callback_t &callback);
+
+    typedef std::function <void(Result, int)> iso_value_callback_t;
+    void set_iso_value_async(int iso_value, const iso_value_callback_t &callback);
+    void get_iso_value_async(const iso_value_callback_t &callback);
 
 
     typedef std::function<void(Result, std::vector<MediaInfo> &)> get_media_infos_callback_t;
