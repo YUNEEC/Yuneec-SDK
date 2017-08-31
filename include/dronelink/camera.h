@@ -61,7 +61,7 @@ public:
 
     Result take_photo();
 
-    Result start_photo_interval(double interval_s);
+    Result start_photo_interval(float interval_s);
     Result stop_photo_interval();
 
     Result start_video();
@@ -69,7 +69,7 @@ public:
 
     void take_photo_async(const result_callback_t &callback);
 
-    void start_photo_interval_async(double interval_s, const result_callback_t &callback);
+    void start_photo_interval_async(float interval_s, const result_callback_t &callback);
     void stop_photo_interval_async(const result_callback_t &callback);
 
     void start_video_async(const result_callback_t &callback);
