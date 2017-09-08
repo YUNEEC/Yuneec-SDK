@@ -50,14 +50,14 @@ public:
 
     enum class Mode {
         PHOTO,
+        PHOTO_SURVEY,
         VIDEO,
         UNKNOWN
     };
 
-    void set_mode_async(Mode mode, const result_callback_t &callback);
-
-    typedef std::function<void(Result, const Mode &)> get_mode_callback_t;
-    void get_mode_async(const get_mode_callback_t &callback);
+    typedef std::function<void(Result, const Mode &)> mode_callback_t;
+    void set_mode_async(Mode mode, const mode_callback_t &callback);
+    void get_mode_async(const mode_callback_t &callback);
 
     Result take_photo();
 
