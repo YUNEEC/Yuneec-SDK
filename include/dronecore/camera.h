@@ -169,6 +169,96 @@ public:
     void set_iso_value_async(int iso_value, const iso_value_callback_t &callback);
     void get_iso_value_async(const iso_value_callback_t &callback);
 
+    struct Resolution {
+        int width_pixels;
+        int height_pixels;
+    };
+
+    typedef std::function <void(Result, Resolution)> resolution_callback_t;
+    void get_resolution_async(const resolution_callback_t &callback);
+
+    enum class PhotoFormat {
+        JPG,
+        JPG_AND_DNG,
+        UNKNOWN
+    };
+
+    typedef std::function <void(Result, PhotoFormat)> photo_format_callback_t;
+    void set_photo_format_async(PhotoFormat photo_format, const photo_format_callback_t &callback);
+    void get_photo_format_async(const photo_format_callback_t &callback);
+
+    enum class PhotoQuality {
+        LOW,
+        MEDIUM,
+        HIGH,
+        ULTRA,
+        UNKNOWN
+    };
+
+    typedef std::function <void(Result, PhotoQuality)> photo_quality_callback_t;
+    void set_photo_quality_async(PhotoQuality photo_quality, const photo_quality_callback_t &callback);
+    void get_photo_quality_async(const photo_quality_callback_t &callback);
+
+
+    enum class VideoFormat {
+        H264,
+        H265,
+        UNKNOWN
+    };
+
+    typedef std::function <void(Result, VideoFormat)> video_format_callback_t;
+    void set_video_format_async(VideoFormat video_format, const video_format_callback_t &callback);
+    void get_video_format_async(const video_format_callback_t &callback);
+
+    enum class VideoResolution {
+        UHD_4096_X_2160_60FPS,
+        UHD_4096_X_2160_50FPS,
+        UHD_4096_X_2160_48FPS,
+        UHD_4096_X_2160_30FPS,
+        UHD_4096_X_2160_25FPS,
+        UHD_4096_X_2160_24FPS,
+        UHD_3840_X_2160_60FPS,
+        UHD_3840_X_2160_50FPS,
+        UHD_3840_X_2160_48FPS,
+        UHD_3840_X_2160_30FPS,
+        UHD_3840_X_2160_25FPS,
+        UHD_3840_X_2160_24FPS,
+        UHD_2720_X_1530_60FPS,
+        UHD_2720_X_1530_48FPS,
+        UHD_2720_X_1530_30FPS,
+        UHD_2720_X_1530_24FPS,
+        FHD_1920_X_1080_120FPS,
+        FHD_1920_X_1080_60FPS,
+        FHD_1920_X_1080_48FPS,
+        FHD_1920_X_1080_30FPS,
+        FHD_1920_X_1080_24FPS,
+        HD_1280_X_720_120FPS,
+        HD_1280_X_720_60FPS,
+        HD_1280_X_720_48FPS,
+        HD_1280_X_720_30FPS,
+        HD_1280_X_720_24FPS,
+        UNKNOWN
+    };
+
+    typedef std::function <void(Result, VideoResolution)> video_resolution_callback_t;
+    void set_video_resolution_async(VideoResolution video_resolution,
+                                    const video_resolution_callback_t &callback);
+    void get_video_resolution_async(const video_resolution_callback_t &callback);
+
+    struct Metering {
+        enum class Mode {
+            AVERAGE,
+            CENTER,
+            SPOT,
+            UNKNOWN
+        } mode;
+        int spot_screen_width_percent; // possible values from 0-99.
+        int spot_screen_height_percent; // possible values from 0-99.
+    };
+
+    typedef std::function <void(Result, Metering)> metering_callback_t;
+    void set_metering_async(Metering metering, const metering_callback_t &callback);
+    void get_metering_async(const metering_callback_t &callback);
 
     typedef std::function<void(Result, std::vector<MediaInfo> &)> get_media_infos_callback_t;
     void get_media_infos_async(const get_media_infos_callback_t &callback);
