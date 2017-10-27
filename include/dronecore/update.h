@@ -47,14 +47,16 @@ public:
         uint16_t product_id;
     };
 
-    class Version {
+    class Version
+    {
     public:
         int major;
         int minor;
         int patch;
     };
 
-    class CameraVersion : public Version {
+    class CameraVersion : public Version
+    {
     public:
         std::string region;
         std::string model;
