@@ -1,9 +1,12 @@
 #pragma once
 
 #include <functional>
+#include "plugin_base.h"
 
 namespace dronecore {
 
+
+class Device;
 class ActionImpl;
 
 /**
@@ -14,18 +17,25 @@ class ActionImpl;
  *
  * The action methods send their associated MAVLink commands to the vehicle and complete
  * (return synchronously or callback asynchronously) with an Action::Result value
- * indicating whether the vehicle has accepted or rejected the command, or that there has been some error.
+ * indicating whether the vehicle has accepted or rejected the command, or that there has been some
+ * error.
  * If the command is accepted, the vehicle will then start to perform the associated action.
  */
-class Action
+class Action : public PluginBase
 {
 public:
     /**
-     * @brief Constructor (internal use only).
+     * @brief Constructor. Creates the plugin for a specific Device.
      *
-     * @param impl Private internal implementation.
+     * The plugin is typically created as shown below:
+     *
+     *     ```cpp
+     *     auto action = std::make_shared<Action>(&device);
+     *     ```
+     *
+     * @param device The specific device associated with this plugin.
      */
-    explicit Action(ActionImpl *impl);
+    explicit Action(Device *device);
 
     /**
      * @brief Destructor (internal use only).
@@ -44,16 +54,18 @@ public:
         COMMAND_DENIED_LANDED_STATE_UNKNOWN, /**< @brief Command refused because landed state is unknown. */
         COMMAND_DENIED_NOT_LANDED, /**< @brief Command refused because vehicle not landed. */
         TIMEOUT, /**< @brief Timeout waiting for command acknowledgement from vehicle. */
+        VTOL_TRANSITION_SUPPORT_UNKNOWN, /**< @brief hybrid/VTOL transition refused because VTOL support is unknown. */
+        NO_VTOL_TRANSITION_SUPPORT, /**< @brief Vehicle does not support hybrid/VTOL transitions. */
         UNKNOWN /**< @brief Unspecified error. */
     };
 
     /**
      * @brief Returns a human-readable English string for an Action::Result.
      *
-     * @param Result The enum value for which a human readable string is required.
+     * @param result The enum value for which a human readable string is required.
      * @return Human readable string for the Action::Result.
      */
-    static const char *result_str(Result);
+    static const char *result_str(Result result);
 
     /**
      * @brief Send command to *arm* the drone (synchronous).
@@ -110,13 +122,35 @@ public:
     /**
      * @brief Send command to *return to the launch* (takeoff) position and *land* (asynchronous).
      *
-     * This switches the drone into [RTL mode](https://docs.px4.io/en/flight_modes/rtl.html) which generally means it will rise up to a certain
-     * altitude to clear any obstacles before heading back to the launch (takeoff) position and
-     * land there.
+     * This switches the drone into [RTL mode](https://docs.px4.io/en/flight_modes/rtl.html) which
+     * generally means it will rise up to a certain altitude to clear any obstacles before heading
+     * back to the launch (takeoff) position and land there.
      *
      * @return Result of request.
      */
     Result return_to_launch() const;
+
+    /**
+     * @brief Send command to transition the drone to fixedwing.
+     *
+     * The associated action will only be executed for VTOL vehicles (on other vehicle types the
+     * command will fail with a Result). The command will succeed if called when the vehicle is
+     * already in fixedwing mode.
+     *
+     * @return Result of request.
+     */
+    Result transition_to_fixedwing() const;
+
+    /**
+     * @brief Send command to transition the drone to multicopter.
+     *
+     * The associated action will only be executed for VTOL vehicles (on other vehicle types the
+     * command will fail with a Result). The command will succeed if called when the vehicle is
+     * already in multicopter mode.
+     *
+     * @return Result of request.
+     */
+    Result transition_to_multicopter() const;
 
     /**
      * @brief Callback type for asynchronous Action calls.
@@ -178,13 +212,35 @@ public:
     /**
      * @brief Send command to *return to the launch* (takeoff) position and *land*  (asynchronous).
      *
-     * This switches the drone into [RTL mode](https://docs.px4.io/en/flight_modes/rtl.html) which generally means it will rise up to a certain
-     * altitude to clear any obstacles before heading back to the launch (takeoff) position and
-     * land there.
+     * This switches the drone into [RTL mode](https://docs.px4.io/en/flight_modes/rtl.html) which
+     * generally means it will rise up to a certain altitude to clear any obstacles before heading
+     * back to the launch (takeoff) position and land there.
      *
      * @param callback Function to call with result of request.
      */
     void return_to_launch_async(result_callback_t callback);
+
+    /**
+     * @brief Send command to transition the drone to fixedwing (asynchronous).
+     *
+     * The associated action will only be executed for VTOL vehicles (on other vehicle types the
+     * command will fail with a Result). The command will succeed if called when the vehicle is
+     * already in fixedwing mode.
+     *
+     * @param callback Function to call with result of request.
+     */
+    void transition_to_fixedwing_async(result_callback_t callback);
+
+    /**
+     * @brief Send command to transition the drone to multicopter (asynchronous).
+     *
+     * The associated action will only be executed for VTOL vehicles (on other vehicle types the
+     * command will fail with a Result). The command will succeed if called when the vehicle is
+     * already in multicopter mode.
+     *
+     * @param callback Function to call with result of request.
+     */
+    void transition_to_multicopter_async(result_callback_t callback);
 
     /**
      * @brief Set takeoff altitude above ground.

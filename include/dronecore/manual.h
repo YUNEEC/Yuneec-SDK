@@ -1,13 +1,16 @@
 #pragma once
 
+#include "plugin_base.h"
+
 namespace dronecore {
 
 class ManualImpl;
+class Device;
 
-class Manual
+class Manual : public PluginBase
 {
 public:
-    explicit Manual(ManualImpl *impl);
+    explicit Manual(Device *device);
     ~Manual();
 
     void set_channels(float throttle_norm,

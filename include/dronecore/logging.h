@@ -1,23 +1,33 @@
 #pragma once
 
 #include <functional>
+#include "plugin_base.h"
 
 namespace dronecore {
 
 class LoggingImpl;
+class Device;
 
 /**
  * @brief The Logging class allows log data using logger and log streaming from the vehicle.
  *
  * **This feature is not yet implemented**.
  */
-class Logging
+class Logging : public PluginBase
 {
 public:
     /**
-     * @brief Constructor (internal use only).
+     * @brief Constructor. Creates the plugin for a specific Device.
+     *
+     * The plugin is typically created as shown below:
+     *
+     *     ```cpp
+     *     auto logging = std::make_shared<Logging>(&device);
+     *     ```
+     *
+     * @param device The specific device associated with this plugin.
      */
-    explicit Logging(LoggingImpl *impl);
+    explicit Logging(Device *device);
 
     /**
      * @brief Destructor (internal use only).
@@ -41,7 +51,7 @@ public:
      * @brief Returns human-readable English string for Logging::Result.
      *
      * @param result Enum for which string is required.
-     * @return result Human-readable string.
+     * @return result Human-readable string for Logging::Result.
      */
     static const char *result_str(Result result);
 

@@ -3,15 +3,17 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include "plugin_base.h"
 
 namespace dronecore {
 
 class UpdateImpl;
+class Device;
 
-class Update
+class Update : public PluginBase
 {
 public:
-    explicit Update(UpdateImpl *impl);
+    explicit Update(Device *device);
     ~Update();
 
     enum class UpdateInstruction : unsigned {
@@ -81,6 +83,12 @@ public:
         int patch;
     };
 
+    struct ST16SVersion {
+        int major;
+        int minor;
+        int patch;
+    };
+
     enum class UpdateState {
         Idle,
         ConnectingToVehicle,
@@ -109,7 +117,8 @@ public:
         Datapilot,
         UpdaterApp,
         Firmware,
-        Apps
+        Apps,
+        ST16S
     };
 
     typedef std::function<void(int progress, UpdateState status, Component component)>
@@ -126,7 +135,8 @@ public:
     void do_app_update(update_callback_t callback, Update::version_callback_t version_callback,
                        bool check_version_only);
     void set_app_version(const std::string &datapilot_version_text,
-                         const std::string &updaterapp_version_text);
+                         const std::string &updaterapp_version_text,
+                         const std::string &st16s_version_text);
     void do_version_check(version_callback_t callback, bool delete_installed);
 
     // Autopilot

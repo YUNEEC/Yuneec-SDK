@@ -1,22 +1,32 @@
 #pragma once
 
 #include <functional>
+#include "plugin_base.h"
 
 namespace dronecore {
 
 class TelemetryImpl;
+class Device;
 
 /**
  * @brief This class allows users to get vehicle telemetry and state information
  * (e.g. battery, GPS, RC connection, flight mode etc.) and set telemetry update rates.
  */
-class Telemetry
+class Telemetry : public PluginBase
 {
 public:
     /**
-     * @brief Constructor (internal use only).
+     * @brief Constructor. Creates the plugin for a specific Device.
+     *
+     * The plugin is typically created as shown below:
+     *
+     *     ```cpp
+     *     auto telemetry = std::make_shared<Telemetry>(&device);
+     *     ```
+     *
+     * @param device The specific device associated with this plugin.
      */
-    explicit Telemetry(TelemetryImpl *impl);
+    explicit Telemetry(Device *device);
 
     /**
      * @brief Destructor (internal use only).
@@ -106,13 +116,14 @@ public:
         RETURN_TO_LAUNCH, /**< @brief Returning to launch position (then landing). */
         LAND, /**< @brief Landing. */
         OFFBOARD, /**< @brief Offboard mode. */
+        FOLLOW_ME, /**< @brief FollowMe mode. */
         UNKNOWN /**< @brief Mode not known. */
     };
 
     /**
      * @brief Get a human readable English string for a flight mode.
      */
-    static const char *flight_mode_str(FlightMode flight_mode);
+    static std::string flight_mode_str(FlightMode flight_mode);
 
     /**
      * @brief Various health flags.
@@ -155,6 +166,7 @@ public:
      * @brief Get human-readable English string for Telemetry::Result.
      *
      * @param result The enum value for which string is needed.
+     * @return Human readable string for the Telemetry::Result.
      */
     static const char *result_str(Result result);
 
@@ -399,7 +411,7 @@ public:
     /**
      * @brief Returns true if the overall health is ok (synchronous).
      *
-     * @return true if all individual health flags are true.
+     * @return True if all health flags are OK.
      */
     bool health_all_ok() const;
 
@@ -551,7 +563,7 @@ public:
     typedef std::function<void(FlightMode flight_mode)> flight_mode_callback_t;
 
     /**
-     * @brief Subscribe to battery status updates (asynchronous).
+     * @brief Subscribe to flight mode updates (asynchronous).
      *
      * Note that flight mode updates are limited to 1Hz.
      *
@@ -578,7 +590,7 @@ public:
     /**
      * @brief Callback type for health status updates.
      *
-     * @param health_all_ok
+     * @param health_all_ok If all health flags are ok.
      */
     typedef std::function<void(bool health_all_ok)> health_all_ok_callback_t;
 

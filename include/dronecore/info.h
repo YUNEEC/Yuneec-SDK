@@ -1,21 +1,31 @@
 #pragma once
 
 #include <cstdint>
+#include "plugin_base.h"
 
 namespace dronecore {
 
+class Device;
 class InfoImpl;
 
 /**
  * @brief The Info class provides basic infomation about the hardware and/or software of a device.
  */
-class Info
+class Info : public PluginBase
 {
 public:
     /**
-     * @brief Constructor (internal use only).
+     * @brief Constructor. Creates the plugin for a specific Device.
+     *
+     * The plugin is typically created as shown below:
+     *
+     *     ```cpp
+     *     auto info = std::make_shared<Info>(&device);
+     *     ```
+     *
+     * @param device The specific device associated with this plugin.
      */
-    explicit Info(InfoImpl *impl);
+    explicit Info(Device *device);
 
     /**
      * @brief Destructor (internal use only).
@@ -44,8 +54,16 @@ public:
         int os_sw_minor; /**< @brief Operating system software minor version. */
         int os_sw_patch; /**< @brief Operating system software patch version. */
         char os_sw_git_hash[GIT_HASH_STR_LEN];/**< @brief Operating system software git hash as string. */
-        uint16_t vendor_id; /**< @brief ID of board vendor. */
-        uint16_t product_id; /**< @brief ID of product. */
+    };
+
+    /**
+     * @brief Type containing device product information.
+     */
+    struct Product {
+        int vendor_id; /**< @brief ID of board vendor. */
+        char vendor_name[32]; /**< @brief Name of vendor. */
+        int product_id; /**< @brief ID of product. */
+        char product_name[32]; /**< @brief Name of product. */
     };
 
     /**
@@ -58,9 +76,9 @@ public:
     uint64_t uuid() const;
 
     /**
-     * @brief Tests if this Version object is fully populated from hardware.
+     * @brief Tests if the Version and Product objects are fully populated from hardware.
      *
-     * @return `true` if Version object is fully populated from device.
+     * @return `true` if Version and Product objects are fully populated from device.
      */
     bool is_complete() const;
 
@@ -70,6 +88,13 @@ public:
      * @return The version object for the device.
      */
     Version get_version() const;
+
+    /**
+     * @brief Get device product information.
+     *
+     * @return The product object for the device.
+     */
+    Product get_product() const;
 
     // Non-copyable
     /**

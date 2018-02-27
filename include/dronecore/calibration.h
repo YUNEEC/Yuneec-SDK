@@ -1,15 +1,17 @@
 #pragma once
 
 #include <functional>
+#include "plugin_base.h"
 
 namespace dronecore {
 
+class Device;
 class CalibrationImpl;
 
-class Calibration
+class Calibration : public PluginBase
 {
 public:
-    explicit Calibration(CalibrationImpl *impl);
+    explicit Calibration(Device *device);
     ~Calibration();
 
     enum class Result {
